@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "612716096484",
+    "firebase_url": "https://pay-me-9658a.firebaseio.com",
+    "project_id": "pay-me-9658a",
+    "storage_bucket": "pay-me-9658a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612716096484:android:fb048b8ea8a0da3cca35f1",
+        "android_client_info": {
+          "package_name": "com.joao.payme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612716096484-1cg8psh4elsca5gihicmclf9u07ns83j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEHZpuwBmxztc4HvI4WW58yH4wOYCtHQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612716096484-1cg8psh4elsca5gihicmclf9u07ns83j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

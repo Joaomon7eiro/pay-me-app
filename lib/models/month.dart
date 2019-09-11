@@ -1,7 +1,13 @@
-enum PaymentStatus { Paid, PaidLate, NotPaid, OnTime }
+import '../payment_status.dart';
 
 class Month {
   final String title;
+  final int number;
   final PaymentStatus status;
-  final Icon icon;
+
+  const Month({
+    this.number,
+    this.title,
+    this.status,
+  });
 }
