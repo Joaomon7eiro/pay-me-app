@@ -13,18 +13,7 @@ class MonthItem extends StatelessWidget {
     if (month.number > DateTime.now().month) {
       return Colors.grey.shade300;
     }
-    switch (month.status) {
-      case PaymentStatus.NotPaid:
-        return Colors.red.shade300;
-      case PaymentStatus.Paid:
-        return Colors.green.shade300;
-      case PaymentStatus.PaidLate:
-        return Colors.orange.shade300;
-      case PaymentStatus.OnTime:
-        return Colors.blue.shade200;
-      default:
-        return Colors.blue.shade200;
-    }
+    return paymentColor(month.status);
   }
 
   @override

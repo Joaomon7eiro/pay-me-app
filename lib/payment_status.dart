@@ -31,3 +31,33 @@ IconData paymentIcon(monthStatus) {
       return Icons.access_time;
   }
 }
+
+Color paymentColor(monthStatus) {
+  switch (monthStatus) {
+    case PaymentStatus.NotPaid:
+      return Colors.red.shade300;
+    case PaymentStatus.Paid:
+      return Colors.green.shade300;
+    case PaymentStatus.PaidLate:
+      return Colors.orange.shade300;
+    case PaymentStatus.OnTime:
+      return Colors.blue.shade200;
+    default:
+      return Colors.blue.shade200;
+  }
+}
+
+PaymentStatus paymentIndex(index) {
+  switch (index) {
+    case 0:
+      return PaymentStatus.NotPaid;
+    case 1:
+      return PaymentStatus.Paid;
+    case 2:
+      return PaymentStatus.PaidLate;
+    case 3:
+      return PaymentStatus.OnTime;
+    default:
+      return PaymentStatus.OnTime;
+  }
+}
