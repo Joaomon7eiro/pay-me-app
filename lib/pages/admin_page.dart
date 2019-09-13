@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:pay_me_app/widgets/admin_item.dart';
 
 import '../models/user.dart';
 import '../widgets/user_item.dart';
@@ -48,35 +49,37 @@ class _AdminPageState extends State<AdminPage> {
                 size: 50,
               ),
             )
-          : Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.2),
-                  child: Text(
-                    'Parças',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemBuilder: (ctx, index) {
-                          return UserItem(_users[index]);
-                        },
-                        itemCount: _users.length,
-                      ),
+          : SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.1),
+                    child: Text(
+                      'Membros',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                     ),
                   ),
-                )
-              ],
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    child: GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2 / 3.4,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20),
+                      itemBuilder: (ctx, index) {
+                        return AdminItem(_users[index]);
+                      },
+                      itemCount: _users.length,
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }

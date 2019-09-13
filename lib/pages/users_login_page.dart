@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pay_me_app/pages/admin_page.dart';
 
 import '../models/user.dart';
-import '../widgets/admin_item.dart';
+import '../widgets/user_item.dart';
 
 class UsersLoginPage extends StatefulWidget {
   static const routeName = '/login-page';
@@ -84,7 +84,7 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
                           mainAxisSpacing: 10,
                         ),
                         itemBuilder: (ctx, index) {
-                          return AdminItem(_users[index]);
+                          return UserItem(_users[index]);
                         },
                         itemCount: _users.length,
                       ),
