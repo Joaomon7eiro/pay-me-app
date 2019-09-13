@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../models/user.dart';
 import '../widgets/user_item.dart';
@@ -42,7 +43,10 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
     return Scaffold(
       body: isLoading
           ? Center(
-              child: Text('...'),
+              child: SpinKitCubeGrid(
+                color: Colors.black,
+                size: 50,
+              ),
             )
           : Column(
               children: <Widget>[
@@ -57,13 +61,13 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
                 Expanded(
                   child: Center(
                     child: Container(
-                      height: 400,
+                      height: MediaQuery.of(context).size.height * 0.6,
                       child: GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 3 / 2,
-                            mainAxisSpacing: 20),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                        ),
                         itemBuilder: (ctx, index) {
                           return UserItem(users[index]);
                         },

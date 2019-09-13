@@ -20,7 +20,13 @@ class UserItem extends StatelessWidget {
             backgroundImage: NetworkImage(user.imageUrl),
           ),
         ),
-        Text(user.name)
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          user.name,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        )
       ],
     );
   }

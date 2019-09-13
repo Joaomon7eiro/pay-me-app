@@ -18,16 +18,17 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
-  String id;
+  String _id;
+  var _refreshKey = GlobalKey<RefreshIndicatorState>();
   final _firestore = Firestore.instance;
 
-  List<Month> months = [];
+  List<Month> _months = [];
 
-  final currentMonth = DateTime.now().month - 1;
+  final _currentMonth = DateTime.now().month - 1;
 
-  bool isLoading = true;
+  bool _isLoading = true;
 
-  List<Month> defaultMonths = [
+  List<Month> _defaultMonths = [
     Month(
       number: 1,
       title: 'Janeiro',
@@ -90,75 +91,81 @@ class _UserHomePageState extends State<UserHomePage> {
     ),
   ];
 
-  void updateMonths() async {
+  Future<Null> updateMonths() async {
     final currentYear = DateTime.now().year.toString();
     final monthsReference = _firestore
         .collection('users')
-        .document(id)
+        .document(_id)
         .collection('years')
         .document(currentYear)
         .collection('months');
 
     final monthsData = await monthsReference.getDocuments();
 
-    print(monthsData.documents.length);
+    print('Quantidade de meses: ${monthsData.documents.length}');
 
     if (monthsData.documents.length == 0) {
       var batch = _firestore.batch();
       for (var i = 0; i < 12; i++) {
         batch.setData(
-            monthsReference.document(defaultMonths[i].number.toString()), {
-          'title': defaultMonths[i].title,
-          'id': defaultMonths[i].number.toString(),
-          'number': defaultMonths[i].number,
-          'status': defaultMonths[i].status.index,
+            monthsReference.document(_defaultMonths[i].number.toString()), {
+          'title': _defaultMonths[i].title,
+          'id': _defaultMonths[i].number.toString(),
+          'number': _defaultMonths[i].number,
+          'status': _defaultMonths[i].status.index,
+          'year': currentYear,
         });
       }
       batch.commit();
       updateMonths();
     } else {
-      months = [];
-      final monthsQuery = monthsReference.orderBy('number', descending: false);
-      final monthsQueryData = await monthsQuery.getDocuments();
+      _months = [];
+      final monthsQueryData = await monthsReference
+          .orderBy('number', descending: false)
+          .getDocuments();
+
       for (var month in monthsQueryData.documents) {
         print(month.data);
-        months.add(Month(
+        _months.add(Month(
           title: month.data['title'],
           number: month.data['number'],
-          status: paymentIndex(month.data['status']),
+          year: currentYear,
+          status: paymentIndex(
+            month.data['status'],
+          ),
         ));
       }
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     User user = ModalRoute.of(context).settings.arguments;
-    if (id == null) {
-      id = user.id;
+    if (_id == null) {
+      _id = user.id;
       updateMonths();
     }
 
     return Scaffold(
       body: SafeArea(
-        child: isLoading
+        child: _isLoading
             ? Center(
                 child: SpinKitCubeGrid(
-                  color: Colors.indigo,
+                  color: Colors.black,
                   size: 50,
                 ),
               )
             : RefreshIndicator(
-                onRefresh: () {
-                  updateMonths();
-                  return;
-                },
+                color: Colors.black,
+                key: _refreshKey,
+                onRefresh: updateMonths,
                 child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(30.0),
@@ -184,31 +191,30 @@ class _UserHomePageState extends State<UserHomePage> {
                             SizedBox(
                               width: 10,
                             ),
-                            InkWell(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(user.imageUrl),
-                              ),
-                            ),
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(user.imageUrl),
+                            )
                           ],
                         ),
                       ),
                       Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
                         child: Column(
                           children: <Widget>[
                             Text(
-                              months[currentMonth].title,
+                              _months[_currentMonth].title,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 30),
                             ),
                             Icon(
-                              paymentIcon(months[currentMonth].status),
+                              paymentIcon(_months[_currentMonth].status),
                               size: 220,
-                              color: paymentColor(months[currentMonth].status),
+                              color:
+                                  paymentColor(_months[_currentMonth].status),
                             ),
                             Text(
-                              paymentStatus(months[currentMonth].status),
+                              paymentStatus(_months[_currentMonth].status),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 30),
                             ),
@@ -216,19 +222,19 @@ class _UserHomePageState extends State<UserHomePage> {
                               height: 5,
                             ),
                             Text(
-                              'Prazo para pagamento atual 07/${DateTime.now().month}',
+                              'Prazo para pagamento atual 07/${DateTime.now().month}/${DateTime.now().year}',
                               style: TextStyle(color: Colors.black54),
                             )
                           ],
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: EdgeInsets.only(top: 40),
                         child: CarouselSlider(
                           initialPage: DateTime.now().month - 1,
                           enableInfiniteScroll: false,
-                          height: 230.0,
-                          items: months.map((month) {
+                          height: 230,
+                          items: _months.map((month) {
                             return Builder(
                               builder: (BuildContext context) {
                                 return MonthItem(month);
