@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:pay_me_app/pages/admin_page.dart';
 
 import '../models/user.dart';
-import '../widgets/admin_item.dart';
+import '../widgets/user_item.dart';
 
-class UsersLoginPage extends StatefulWidget {
-  static const routeName = '/login-page';
+class AdminPage extends StatefulWidget {
+  static const routeName = '/admin-page';
 
   @override
-  _UsersLoginPageState createState() => _UsersLoginPageState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _UsersLoginPageState extends State<UsersLoginPage> {
+class _AdminPageState extends State<AdminPage> {
   final _firestore = Firestore.instance;
   List<User> _users = [];
   bool _isLoading = true;
-  int _adminCount = 0;
 
   @override
   void initState() {
@@ -40,17 +38,8 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
     });
   }
 
-  void incrementAdmin() {
-    _adminCount++;
-    if (_adminCount == 7) {
-      Navigator.pushNamed(context, AdminPage.routeName);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    _adminCount = 0;
-
     return Scaffold(
       body: _isLoading
           ? Center(
@@ -64,13 +53,9 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
                 Container(
                   margin: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.2),
-                  child: GestureDetector(
-                    onTap: incrementAdmin,
-                    child: Text(
-                      'Pagar Spotify',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-                    ),
+                  child: Text(
+                    'Parças',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                   ),
                 ),
                 Expanded(
@@ -84,7 +69,7 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
                           mainAxisSpacing: 10,
                         ),
                         itemBuilder: (ctx, index) {
-                          return AdminItem(_users[index]);
+                          return UserItem(_users[index]);
                         },
                         itemCount: _users.length,
                       ),
